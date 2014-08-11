@@ -1,0 +1,10 @@
+
+2014/08/10 19:07:01 Manager.go:34: INFO [Get server config complete]
+
+2014/08/10 19:08:55 Manager.go:34: INFO [Get server config complete]
+
+2014/08/10 19:09:49 Manager.go:34: INFO [Get server config complete]
+
+2014/08/10 19:11:33 Manager.go:35: INFO [Get server config complete]
+
+2014/08/10 19:12:50 Manager.go:35: INFO [Get server config complete]
