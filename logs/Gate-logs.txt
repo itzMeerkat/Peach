@@ -1,0 +1,4 @@
+
+2014/08/13 18:59:51 gate.go:40: INFO [{[{connector-server-01 127.0.0.1 2000} {connector-server-02 127.0.0.1 2001}]}]
+
+2014/08/13 18:59:51 gate.go:41: INFO [Get server config complete]

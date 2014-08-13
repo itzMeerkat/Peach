@@ -1,12 +1,30 @@
 package Structs
 
-type ServerInfo struct {
-	Type string
+type ServerCommand struct {
+	ArgsAmount int
+	Args       string
+}
+
+type ConnectorServer struct {
 	Name string
 	Ip   string
 	Port string
 }
 
-type ServerInfoList struct {
-	Servers []ServerInfo
+type LogicServer struct {
+	Name string
+	Ip   string
+	Port string
+}
+
+type ChatServer struct {
+	Name string
+	Ip   string
+	Port string
+}
+
+type GateServer struct {
+	Name string
+	Ip   string
+	Port string
 }

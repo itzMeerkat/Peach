@@ -2,28 +2,17 @@ package main
 
 import (
 	"../Logger"
+	"../Structs"
 	"encoding/json"
 	"net"
 	"os"
 )
 
-//This struct should be a independent package
-type serverCommand struct {
-	ArgsAmount int
-	Args       string
-}
-
-//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
-type serverInfo struct {
-	Type string
-	Name string
-	Ip   string
-	Port string
-}
-
 type serverInfoList struct {
-	Servers []serverInfo
+	Connector []Structs.ConnectorServer
+	Chat      []Structs.ChatServer
+	Gate      []Structs.GateServer
+	Logic     []Structs.LogicServer
 }
 
 var serverList serverInfoList
@@ -41,6 +30,7 @@ func getServerConfig() {
 	err = json.Unmarshal(buf[:length], &serverList)
 	checkError(err)
 
+	Logger.Info(serverList)
 	Logger.Info("Get server config complete")
 	return
 }
@@ -53,7 +43,7 @@ func setLogger() {
 func manageServer(conn net.Conn) {
 	defer conn.Close()
 
-	var cmd serverCommand
+	var cmd Structs.ServerCommand
 
 	for {
 		buffer := make([]byte, 512)
