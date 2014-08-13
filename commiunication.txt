@@ -1,0 +1,4 @@
+﻿{"ArgAmount":int,"Args":"string"}
+SHUTDOWN
+RESTART
+根据游戏逻辑的不同再有不同的标准。。暂时还没有想好
