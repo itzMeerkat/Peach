@@ -4,8 +4,10 @@ import (
 	"../Logger"
 	"../Structs"
 	"encoding/json"
+	"math/rand"
 	"net"
 	"os"
+	"time"
 )
 
 type connectorInfo struct {
@@ -14,6 +16,7 @@ type connectorInfo struct {
 
 var managerClient *net.Conn
 var serverList connectorInfo
+var clientHandler *net.Listener
 
 func setLogger() {
 	Logger.SetConsole(true)
@@ -38,14 +41,32 @@ func getConnectorServer() {
 	checkError(err)
 
 	Logger.Info(serverList)
-	Logger.Info("Get server config complete")
+	Logger.Info("Get connector server config complete")
 	return
+}
+
+func setupClientHandler() {
+	rander := rand.New(rand.NewSource(time.Now().UnixNano()))
+	addr, err := net.ResolveTCPAddr("tcp", ":5000")
+	checkError(err)
+
+	clientHandler, err := net.ListenTCP("tcp", addr)
+	checkError(err)
+
+	for {
+		conn, err := clientHandler.Accept()
+		checkError(err)
+
+		r := rander.Int() % 2
+		conn.Write([]byte(serverList.Connector[r].Ip + ":" + serverList.Connector[r].Port))
+	}
 }
 
 func main() {
 	setLogger()
 	setupManagerClient()
 	getConnectorServer()
+	setupClientHandler()
 }
 
 func checkError(err error) {
