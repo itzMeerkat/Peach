@@ -26,6 +26,17 @@ func setLogger() {
 func setupManagerClient() {
 	managerClient, _ := net.Dial("tcp", "127.0.0.1:2000")
 	defer managerClient.Close()
+	for {
+		buffer := make([]byte, 1024)
+		length, err := managerClient.Read(buffer)
+		checkError(err)
+		if string(buffer[:length]) == "STOP" {
+			managerClient.Close()
+			clientHandler.Close()
+			Logger.Info("Gate server closed")
+			os.Exit(0)
+		}
+	}
 }
 
 func getConnectorServer() {
@@ -40,13 +51,13 @@ func getConnectorServer() {
 	err = json.Unmarshal(buf[:length], &serverList)
 	checkError(err)
 
-	Logger.Info(serverList)
+	//Logger.Info(serverList)
 	Logger.Info("Get connector server config complete")
 	return
 }
 
 func setupClientHandler() {
-	rander := rand.New(rand.NewSource(time.Now().UnixNano()))
+	rand.Seed(time.Now().Unix())
 	addr, err := net.ResolveTCPAddr("tcp", ":5000")
 	checkError(err)
 
@@ -57,16 +68,17 @@ func setupClientHandler() {
 		conn, err := clientHandler.Accept()
 		checkError(err)
 
-		r := rander.Int() % 2
+		r := rand.Intn(2)
 		conn.Write([]byte(serverList.Connector[r].Ip + ":" + serverList.Connector[r].Port))
+
 	}
 }
 
 func main() {
 	setLogger()
-	setupManagerClient()
 	getConnectorServer()
-	setupClientHandler()
+	go setupClientHandler()
+	setupManagerClient()
 }
 
 func checkError(err error) {

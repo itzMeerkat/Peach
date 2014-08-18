@@ -2,3 +2,13 @@
 SHUTDOWN
 RESTART
 根据游戏逻辑的不同再有不同的标准。。暂时还没有想好
+
+2000端口是Manager
+3000是数据库
+5000端口是Gate
+5001往后是Connector
+
+都是子服务器连接父服务器
+Manager<-Gate
+       <-Connector<-Logic
+          Database<-Logic
