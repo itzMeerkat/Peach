@@ -1,0 +1,6 @@
+TODO list:
+Manager server give Connector server a port to listen.
+Every connector server have different log file.
+Decide which server will setup auth service,connector or logic(I prefer in logic server,maybe it should be).
+Channel service will setup by connector server, every channel boardcast will send to every connector server.(too much extra tcp connection?)
+Peach should be CRASH-ONLY!(add panic to function checkError)
