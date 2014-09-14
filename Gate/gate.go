@@ -10,12 +10,8 @@ import (
 	"time"
 )
 
-type connectorInfo struct {
-	Connector []Structs.ConnectorServer
-}
-
 var managerClient *net.Conn
-var serverList connectorInfo
+var serverList Structs.ServerList
 var clientHandler *net.Listener
 
 func setLogger() {
@@ -24,22 +20,31 @@ func setLogger() {
 }
 
 func setupManagerClient() {
-	managerClient, _ := net.Dial("tcp", "127.0.0.1:2000")
+	managerClient, err := net.Dial("tcp", serverList.Manager[0].Ip+serverList.Manager[0].Port)
+	checkError(err)
 	defer managerClient.Close()
+
+	var cmd Structs.ServerCommand
+
 	for {
 		buffer := make([]byte, 1024)
 		length, err := managerClient.Read(buffer)
 		checkError(err)
-		if string(buffer[:length]) == "STOP" {
-			managerClient.Close()
-			clientHandler.Close()
+
+		err = json.Unmarshal(buffer[:length], cmd)
+		checkError(err)
+
+		if cmd.Args[0] == "STOP" {
 			Logger.Info("Gate server closed")
 			os.Exit(0)
+		}
+		if cmd.Args[0] == "LISTEN" {
+			go setupClientHandler(cmd.Args[1])
 		}
 	}
 }
 
-func getConnectorServer() {
+func getServerConfig() {
 	serverConfig, err := os.Open("../Config/servers.conf")
 	defer serverConfig.Close()
 	checkError(err)
@@ -51,14 +56,12 @@ func getConnectorServer() {
 	err = json.Unmarshal(buf[:length], &serverList)
 	checkError(err)
 
-	//Logger.Info(serverList)
-	Logger.Info("Get connector server config complete")
-	return
+	Logger.Info("Get server config complete")
 }
 
-func setupClientHandler() {
+func setupClientHandler(p string) {
 	rand.Seed(time.Now().Unix())
-	addr, err := net.ResolveTCPAddr("tcp", ":5000")
+	addr, err := net.ResolveTCPAddr("tcp", p)
 	checkError(err)
 
 	clientHandler, err := net.ListenTCP("tcp", addr)
@@ -76,8 +79,8 @@ func setupClientHandler() {
 
 func main() {
 	setLogger()
-	getConnectorServer()
-	go setupClientHandler()
+	Logger.Info("Starting Gate Server...")
+	getServerConfig()
 	setupManagerClient()
 }
 

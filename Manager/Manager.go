@@ -8,14 +8,7 @@ import (
 	"os"
 )
 
-type serverInfoList struct {
-	Connector []Structs.ConnectorServer
-	Chat      []Structs.ChatServer
-	Gate      []Structs.GateServer
-	Logic     []Structs.LogicServer
-}
-
-var serverList serverInfoList
+var serverList Structs.ServerList
 var serverManager *net.TCPListener
 
 func getServerConfig() {
@@ -58,7 +51,7 @@ func manageServer(conn net.Conn) {
 }
 
 func setupManager() {
-	listenPort, err := net.ResolveTCPAddr("tcp", ":2000")
+	listenPort, err := net.ResolveTCPAddr("tcp", serverList.Manager[0].Port)
 	checkError(err)
 
 	serverManager, err = net.ListenTCP("tcp", listenPort)
@@ -74,7 +67,7 @@ func setupManager() {
 
 func main() {
 	setLogger()
-	Logger.Info("Starting Server...")
+	Logger.Info("Starting Manager Server...")
 	getServerConfig()
 	setupManager()
 }

@@ -6,28 +6,10 @@ import (
 
 type ServerCommand struct {
 	ArgsAmount int
-	Args       string
+	Args       []string
 }
 
-type ConnectorServer struct {
-	Name string
-	Ip   string
-	Port string
-}
-
-type LogicServer struct {
-	Name string
-	Ip   string
-	Port string
-}
-
-type ChatServer struct {
-	Name string
-	Ip   string
-	Port string
-}
-
-type GateServer struct {
+type Server struct {
 	Name string
 	Ip   string
 	Port string
@@ -36,4 +18,12 @@ type GateServer struct {
 type Connection struct {
 	uid    int
 	socket *net.Conn
+}
+
+type ServerList struct {
+	Connector []Server
+	Chat      []Server
+	Gate      []Server
+	Logic     []Server
+	Manager   []Server
 }
