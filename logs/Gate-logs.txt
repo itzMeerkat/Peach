@@ -158,3 +158,27 @@
 2014/08/15 19:07:27 gate.go:59: DEBUG [new]
 
 2014/08/15 19:07:28 gate.go:59: DEBUG [new]
+
+2014/09/15 18:59:07 gate.go:83: INFO [Starting Gate Server...]
+
+2014/09/15 18:59:07 gate.go:60: INFO [Get server config complete]
+
+2014/09/15 19:01:28 gate.go:83: INFO [Starting Gate Server...]
+
+2014/09/15 19:01:28 gate.go:60: INFO [Get server config complete]
+
+2014/09/15 19:01:28 gate.go:42: INFO [Listening port :824]
+
+2014/09/15 19:05:21 gate.go:83: INFO [Starting Gate Server...]
+
+2014/09/15 19:05:21 gate.go:60: INFO [Get server config complete]
+
+2014/09/15 19:05:21 gate.go:42: INFO [Listening port :824]
+
+2014/09/15 19:11:09 gate.go:83: INFO [Starting Gate Server...]
+
+2014/09/15 19:11:09 gate.go:60: INFO [Get server config complete]
+
+2014/09/15 19:11:09 gate.go:42: INFO [Listening port :824]
+
+2014/09/15 19:11:15 gate.go:74: INFO [A client from127.0.0.1:59360is online]

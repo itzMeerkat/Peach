@@ -5,8 +5,7 @@ import (
 )
 
 type ServerCommand struct {
-	ArgsAmount int
-	Args       []string
+	Args []string
 }
 
 type Server struct {

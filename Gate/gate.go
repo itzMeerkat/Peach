@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -24,22 +25,22 @@ func setupManagerClient() {
 	checkError(err)
 	defer managerClient.Close()
 
-	var cmd Structs.ServerCommand
+	//var cmd []string
 
 	for {
 		buffer := make([]byte, 1024)
 		length, err := managerClient.Read(buffer)
 		checkError(err)
 
-		err = json.Unmarshal(buffer[:length], cmd)
-		checkError(err)
+		cmd := strings.Split(string(buffer[:length]), "|")
 
-		if cmd.Args[0] == "STOP" {
+		if cmd[0] == "STOP" {
 			Logger.Info("Gate server closed")
 			os.Exit(0)
 		}
-		if cmd.Args[0] == "LISTEN" {
-			go setupClientHandler(cmd.Args[1])
+		if cmd[0] == "LISTEN" {
+			Logger.Info("Listening port " + cmd[1])
+			go setupClientHandler(cmd[1])
 		}
 	}
 }
@@ -70,10 +71,10 @@ func setupClientHandler(p string) {
 	for {
 		conn, err := clientHandler.Accept()
 		checkError(err)
+		Logger.Info("A client from " + conn.RemoteAddr().String() + " is online")
 
 		r := rand.Intn(2)
 		conn.Write([]byte(serverList.Connector[r].Ip + ":" + serverList.Connector[r].Port))
-
 	}
 }
 

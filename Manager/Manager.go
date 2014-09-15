@@ -23,7 +23,6 @@ func getServerConfig() {
 	err = json.Unmarshal(buf[:length], &serverList)
 	checkError(err)
 
-	Logger.Info(serverList)
 	Logger.Info("Get server config complete")
 	return
 }
@@ -36,16 +35,14 @@ func setLogger() {
 func manageServer(conn net.Conn) {
 	defer conn.Close()
 
-	var cmd Structs.ServerCommand
+	_, _ = conn.Write([]byte("LISTEN|:824"))
 
+	//Logger.Debug("LALALA")
 	for {
 		buffer := make([]byte, 512)
-		len, err := conn.Read(buffer)
-		if len > 0 {
-			checkError(err)
-			json.Unmarshal(buffer[:len], &cmd)
-			Logger.Debug(cmd.Args)
-		}
+		length, err := conn.Read(buffer)
+		checkError(err)
+		Logger.Debug(buffer[:length])
 
 	}
 }

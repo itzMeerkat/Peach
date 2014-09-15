@@ -14,3 +14,37 @@
 2014/08/13 18:58:39 Manager.go:34: INFO [Get server config complete]
 
 2014/08/13 18:58:39 Manager.go:67: INFO [Server manager setup success]
+
+2014/09/15 18:59:03 Manager.go:70: INFO [Starting Manager Server...]
+
+2014/09/15 18:59:03 Manager.go:26: INFO [{[{connector-server-01 127.0.0.1 :2000} {connector-server-02 127.0.0.1 :2001}] [{chat-server-01 127.0.0.1 :2002} {chat-server-02 127.0.0.1 :2003}] [{gate-server-01 127.0.0.1 :2006}] [{logic-server-01 127.0.0.1 :2004} {logic-server-02 127.0.0.1 :2005}] [{manager-server-01 127.0.0.1 :2007}]}]
+
+2014/09/15 18:59:03 Manager.go:27: INFO [Get server config complete]
+
+2014/09/15 18:59:03 Manager.go:60: INFO [Server manager setup success]
+
+2014/09/15 19:01:18 Manager.go:71: INFO [Starting Manager Server...]
+
+2014/09/15 19:01:18 Manager.go:26: INFO [{[{connector-server-01 127.0.0.1 :2000} {connector-server-02 127.0.0.1 :2001}] [{chat-server-01 127.0.0.1 :2002} {chat-server-02 127.0.0.1 :2003}] [{gate-server-01 127.0.0.1 :2006}] [{logic-server-01 127.0.0.1 :2004} {logic-server-02 127.0.0.1 :2005}] [{manager-server-01 127.0.0.1 :2007}]}]
+
+2014/09/15 19:01:18 Manager.go:27: INFO [Get server config complete]
+
+2014/09/15 19:01:18 Manager.go:61: INFO [Server manager setup success]
+
+2014/09/15 19:01:28 Manager.go:42: DEBUG [LALALA]
+
+2014/09/15 19:05:19 Manager.go:71: INFO [Starting Manager Server...]
+
+2014/09/15 19:05:19 Manager.go:26: INFO [{[{connector-server-01 127.0.0.1 :2000} {connector-server-02 127.0.0.1 :2001}] [{chat-server-01 127.0.0.1 :2002} {chat-server-02 127.0.0.1 :2003}] [{gate-server-01 127.0.0.1 :2006}] [{logic-server-01 127.0.0.1 :2004} {logic-server-02 127.0.0.1 :2005}] [{manager-server-01 127.0.0.1 :2007}]}]
+
+2014/09/15 19:05:19 Manager.go:27: INFO [Get server config complete]
+
+2014/09/15 19:05:19 Manager.go:61: INFO [Server manager setup success]
+
+2014/09/15 19:11:06 Manager.go:71: INFO [Starting Manager Server...]
+
+2014/09/15 19:11:06 Manager.go:26: INFO [{[{connector-server-01 127.0.0.1 :2000} {connector-server-02 127.0.0.1 :2001}] [{chat-server-01 127.0.0.1 :2002} {chat-server-02 127.0.0.1 :2003}] [{gate-server-01 127.0.0.1 :2006}] [{logic-server-01 127.0.0.1 :2004} {logic-server-02 127.0.0.1 :2005}] [{manager-server-01 127.0.0.1 :2007}]}]
+
+2014/09/15 19:11:06 Manager.go:27: INFO [Get server config complete]
+
+2014/09/15 19:11:06 Manager.go:61: INFO [Server manager setup success]
