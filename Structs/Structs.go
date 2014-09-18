@@ -4,14 +4,23 @@ import (
 	"net"
 )
 
+const (
+	GATE_SERVER = iota
+	CONNECTOR_SERVER
+	CHANNEL_SERVER
+	LOGIC_SERVER
+)
+
 type ServerCommand struct {
 	Args []string
 }
 
 type Server struct {
-	Name string
-	Ip   string
-	Port string
+	Name        string
+	Ip          string
+	Port        string
+	IsAvailable bool
+	Conn        net.Conn
 }
 
 type Connection struct {
@@ -21,7 +30,7 @@ type Connection struct {
 
 type ServerList struct {
 	Connector []Server
-	Chat      []Server
+	Channel   []Server
 	Gate      []Server
 	Logic     []Server
 	Manager   []Server

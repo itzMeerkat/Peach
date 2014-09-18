@@ -14,6 +14,7 @@ import (
 var managerClient *net.Conn
 var serverList Structs.ServerList
 var clientHandler *net.Listener
+var SERVER_TYPE string
 
 func setLogger() {
 	Logger.SetConsole(true)
@@ -79,6 +80,7 @@ func setupClientHandler(p string) {
 }
 
 func main() {
+	SERVER_TYPE = "GATE"
 	setLogger()
 	Logger.Info("Starting Gate Server...")
 	getServerConfig()
