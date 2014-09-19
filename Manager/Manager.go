@@ -34,50 +34,67 @@ func setLogger() {
 }
 
 func manageServer(conn net.Conn) {
+	var serverType int
 	var serverName, portToListen string
 	var id int
 	defer conn.Close()
-	defer Logger.Debug("DISCONNECT " + conn.RemoteAddr().String())
 
 	for {
 		buffer := make([]byte, 512)
 		length, err := conn.Read(buffer)
 
 		if err != nil {
+			defer Logger.Info("Disconnected from " + serverName + " " + conn.RemoteAddr().String())
+			switch serverType {
+			case Structs.GATE_SERVER:
+				serverList.Gate[id].IsAvailable = false
+				serverList.Gate[id].Conn = nil
+			case Structs.CONNECTOR_SERVER:
+				serverList.Connector[id].IsAvailable = false
+				serverList.Connector[id].Conn = nil
+			case Structs.CHANNEL_SERVER:
+				serverList.Channel[id].IsAvailable = false
+				serverList.Channel[id].Conn = nil
+			case Structs.LOGIC_SERVER:
+				serverList.Logic[id].IsAvailable = false
+				serverList.Logic[id].Conn = nil
+			}
 			return
 		}
-		//checkError(err)
 
 		cmd := strings.Split(string(buffer[:length]), "|")
 
 		if cmd[0] == "ONLINE" {
 			if cmd[1] == "GATE_SERVER" {
+				serverType = Structs.GATE_SERVER
 				id, serverName, portToListen = findFreeServer(Structs.GATE_SERVER)
 				if id != -1 {
 					serverList.Gate[id].Conn = conn
 				}
 			}
 			if cmd[1] == "CONNECTOR_SERVER" {
+				serverType = Structs.CONNECTOR_SERVER
 				id, serverName, portToListen = findFreeServer(Structs.CONNECTOR_SERVER)
 				if id != -1 {
 					serverList.Connector[id].Conn = conn
 				}
 			}
 			if cmd[1] == "CHANNEL_SERVER" {
+				serverType = Structs.CHANNEL_SERVER
 				id, serverName, portToListen = findFreeServer(Structs.CHANNEL_SERVER)
 				if id != -1 {
 					serverList.Channel[id].Conn = conn
 				}
 			}
 			if cmd[1] == "LOGIC_SERVER" {
+				serverType = Structs.LOGIC_SERVER
 				id, serverName, portToListen = findFreeServer(Structs.LOGIC_SERVER)
 				if id != -1 {
 					serverList.Logic[id].Conn = conn
 				}
 			}
-			conn.Write([]byte(serverName + "|" + portToListen))
+			conn.Write([]byte("SETUP|" + serverName + "|" + portToListen))
 		}
-		Logger.Debug(conn)
 	}
 }
 
@@ -92,6 +109,7 @@ func setupManager() {
 	for {
 		conn, err := serverManager.Accept()
 		checkError(err)
+		Logger.Info("Accepted a new connection")
 		go manageServer(conn)
 	}
 }

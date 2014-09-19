@@ -1,5 +1,0 @@
-SERVER_TYPE
-1 is for GATE
-2 is for CONNECTOR
-3 is for CHANNEL
-4 is for LOGIC

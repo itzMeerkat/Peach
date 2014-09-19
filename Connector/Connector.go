@@ -3,35 +3,51 @@ package main
 import (
 	"../Logger"
 	"../Structs"
-	"encoding/json"
+	//"encoding/json"
 	"net"
-	//"os"
+	"os"
+	"strings"
 )
 
 var managerClient *net.Conn
 var clientListener *net.TCPListener
-var managerCmd *Structs.ServerCommand
+var serverList Structs.ServerList
+var SERVER_NAME string
 
-func initLogger() {
+func setLogger() {
 	Logger.SetConsole(true)
 	Logger.SetRollingDaily("../logs", "Connector-logs.txt")
 }
 
-func initManager() {
-	managerClient, err := net.Dial("tcp", "127.0.0.1:2000")
+func setupManagerClient() {
+	managerClient, err := net.Dial("tcp", serverList.Manager[0].Ip+serverList.Manager[0].Port)
 	checkError(err)
+	defer managerClient.Close()
+
+	managerClient.Write([]byte("ONLINE|CONNECTOR_SERVER"))
+
 	for {
-		buffer := make([]byte, 1024)
+		buffer := make([]byte, 512)
 		length, err := managerClient.Read(buffer)
 		checkError(err)
-		err = json.Unmarshal(buffer[:length], managerCmd)
-		checkError(err)
-		Logger.Info(managerCmd)
+
+		cmd := strings.Split(string(buffer[:length]), "|")
+
+		if cmd[0] == "STOP" {
+			Logger.Info("Connector server closed")
+			os.Exit(0)
+		}
+		if cmd[0] == "SETUP" {
+			Logger.Info("Now my name is " + cmd[1])
+			SERVER_NAME = cmd[1]
+			Logger.Info("Listening port " + cmd[2])
+			go setupClientListener(cmd[2])
+		}
 	}
 }
 
-func setupClientListener() {
-	laddr, err := net.ResolveTCPAddr("tcp", ":5001")
+func setupClientListener(p string) {
+	laddr, err := net.ResolveTCPAddr("tcp", p)
 	checkError(err)
 	clientListener, err = net.ListenTCP("tcp", laddr)
 	checkError(err)
@@ -43,9 +59,9 @@ func setupClientListener() {
 }
 
 func main() {
-	initLogger()
-	initManager()
-	setupClientListener()
+	setLogger()
+	setupManagerClient()
+	//setupClientListener()
 }
 
 func checkError(err error) {

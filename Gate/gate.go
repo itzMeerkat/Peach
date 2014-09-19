@@ -14,7 +14,7 @@ import (
 var managerClient *net.Conn
 var serverList Structs.ServerList
 var clientHandler *net.Listener
-var SERVER_TYPE string
+var SERVER_NAME string
 
 func setLogger() {
 	Logger.SetConsole(true)
@@ -26,10 +26,10 @@ func setupManagerClient() {
 	checkError(err)
 	defer managerClient.Close()
 
-	//var cmd []string
+	managerClient.Write([]byte("ONLINE|GATE_SERVER"))
 
 	for {
-		buffer := make([]byte, 1024)
+		buffer := make([]byte, 512)
 		length, err := managerClient.Read(buffer)
 		checkError(err)
 
@@ -39,9 +39,11 @@ func setupManagerClient() {
 			Logger.Info("Gate server closed")
 			os.Exit(0)
 		}
-		if cmd[0] == "LISTEN" {
-			Logger.Info("Listening port " + cmd[1])
-			go setupClientHandler(cmd[1])
+		if cmd[0] == "SETUP" {
+			Logger.Info("Now my name is " + cmd[1])
+			SERVER_NAME = cmd[1]
+			Logger.Info("Listening port " + cmd[2])
+			go setupClientHandler(cmd[2])
 		}
 	}
 }
@@ -74,13 +76,12 @@ func setupClientHandler(p string) {
 		checkError(err)
 		Logger.Info("A client from " + conn.RemoteAddr().String() + " is online")
 
-		r := rand.Intn(2)
+		r := rand.Intn(len(serverList.Connector[:]))
 		conn.Write([]byte(serverList.Connector[r].Ip + ":" + serverList.Connector[r].Port))
 	}
 }
 
 func main() {
-	SERVER_TYPE = "GATE"
 	setLogger()
 	Logger.Info("Starting Gate Server...")
 	getServerConfig()
