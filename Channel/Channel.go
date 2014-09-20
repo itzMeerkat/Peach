@@ -21,7 +21,7 @@ func setupManagerClient() {
 	checkError(err)
 	defer managerClient.Close()
 
-	managerClient.Write([]byte("ONLINE|GATE_SERVER"))
+	managerClient.Write([]byte("ONLINE|CHANNEL_SERVER"))
 
 	for {
 		buffer := make([]byte, 512)
@@ -31,7 +31,7 @@ func setupManagerClient() {
 		cmd := strings.Split(string(buffer[:length]), "|")
 
 		if cmd[0] == "STOP" {
-			Logger.Info("Gate server closed")
+			Logger.Info("Channel server closed")
 			os.Exit(0)
 		}
 		if cmd[0] == "SETUP" {
